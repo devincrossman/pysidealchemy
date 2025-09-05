@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         create_db()
-        self.setWindowTitle("Maverick")
+        self.setWindowTitle("PySide Alechemy")
         self.resize(800, 600)
 
         self.session = SessionLocal()
@@ -65,8 +65,8 @@ class MainWindow(QMainWindow):
     def show_about(self):
         QMessageBox.information(
             self,
-            "About Maverick",
-            "Maverick App\nVersion 1.0\nPowered by Awesomeness"
+            "About PySideAlchemy",
+            "PySideAlchemy App\nVersion 1.0\nPowered by Awesomeness"
         )
 
     def update_logout_action(self):
