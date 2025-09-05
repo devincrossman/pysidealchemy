@@ -104,6 +104,7 @@ pysidealchemy/
 ├── utils/               # Helpers/config
 │   └── config.py
 ├── pyproject.toml       # Project metadata & dependencies
+├── PySideAlchemy.spec   # PyInstaller spec file
 ├── uv.lock              # Locked dependencies for reproducible installs
 ├── .env                 # Local environment variables (ignored by git)
 └── .env.example         # Example env file for sharing
@@ -133,6 +134,11 @@ Auto-fix simple issues:
 ```
 uv run ruff check . --fix
 ```
+
+### PyInstaller
+The application can be built into an exe using PyInstaller.
+
+Run `pyinstaller pysidealchemy.spec` to generate the exe in the dist folder
 
 ## 🌱 Development Notes
 - To reset the app, delete database.db and rerun — it will recreate tables.
