@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         QMessageBox.information(
             self,
             "About PySideAlchemy",
-            "PySideAlchemy App\nVersion 1.0\nPowered by Awesomeness"
+            "PySideAlchemy App\nVersion 1.0\nPowered by Awesomeness",
         )
 
     def update_logout_action(self):
@@ -118,10 +118,12 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Login Failed", "Invalid credentials")
                 return False
             if required_role and not self.auth.is_authorized(required_role):
-                QMessageBox.warning(self, "Access Denied", f"{required_role.capitalize()} credentials required")
+                QMessageBox.warning(
+                    self,
+                    "Access Denied",
+                    f"{required_role.capitalize()} credentials required",
+                )
                 return False
             self.on_login_success()
             return True
         return False
-
-

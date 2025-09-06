@@ -1,0 +1,69 @@
+# GitHub Actions workflow for a Python project using uv and PySide6
+#
+# This workflow includes three jobs:
+# 1. Lint: Checks code style and formatting using ruff.
+# 2. Test: Runs the pytest test suite.
+# 3. Build: Creates the application executable using PyInstaller.
+
+name: Python CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install uv
+        run: pip install uv
+      - name: Install dependencies
+        run: uv sync --quiet
+      - name: Run linter and formatter checks
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install uv
+        run: pip install uv
+      - name: Install dependencies
+        run: uv sync --quiet
+      - name: Run tests
+        run: uv run pytest
+
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install uv
+        run: pip install uv
+      - name: Install dependencies
+        run: uv sync --quiet
+      - name: Create .env file for build
+        run: Copy-Item .env.example .env
+      - name: Build with PyInstaller
+        run: uv run pyinstaller PySideAlchemy.spec
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pysidealchemy-build
+          path: dist/

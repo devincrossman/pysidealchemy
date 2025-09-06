@@ -19,6 +19,7 @@ def create_db():
     with SessionLocal() as session:
         ensure_default_admin(session)
 
+
 def ensure_default_admin(session: Session):
     """Create a default admin user if none exists."""
     admin = session.query(User).filter_by(username="admin").first()

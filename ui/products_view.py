@@ -12,6 +12,7 @@ from models_qt.products_model import ProductTableModel
 
 class ProductsView(QWidget):
     """Products tab with table and buttons."""
+
     def __init__(self, session):
         super().__init__()
         layout = QVBoxLayout(self)
