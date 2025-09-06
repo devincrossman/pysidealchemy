@@ -35,7 +35,10 @@ class OrdersTableModel(QAbstractTableModel):
         return None
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
-        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
+        if (
+            orientation == Qt.Orientation.Horizontal
+            and role == Qt.ItemDataRole.DisplayRole
+        ):
             return self.headers[section]
         return None
 
@@ -68,7 +71,9 @@ class OrdersTableModel(QAbstractTableModel):
         return True
 
     def addOrder(self, product_id=0, user_id=0, quantity=1, status="Pending"):
-        new_order = Order(product_id=product_id, user_id=user_id, quantity=quantity, status=status)
+        new_order = Order(
+            product_id=product_id, user_id=user_id, quantity=quantity, status=status
+        )
         self.session.add(new_order)
         self.session.commit()
         self.layoutAboutToBeChanged.emit()

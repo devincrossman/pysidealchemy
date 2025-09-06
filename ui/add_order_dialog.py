@@ -20,7 +20,7 @@ class AddOrderDialog(QDialog):
         self.user_cb = QComboBox()
         self.users = session.query(User).all()  # store objects
         for u in self.users:
-            self.user_cb.addItem(u.username, u.id)   # display name, store id as data
+            self.user_cb.addItem(u.username, u.id)  # display name, store id as data
 
         self.product_cb = QComboBox()
         self.products = session.query(Product).all()
@@ -34,7 +34,9 @@ class AddOrderDialog(QDialog):
         layout.addRow("Product", self.product_cb)
         layout.addRow("Quantity", self.qty_spin)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)

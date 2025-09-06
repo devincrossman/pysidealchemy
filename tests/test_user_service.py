@@ -1,11 +1,12 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from werkzeug.security import generate_password_hash
 
 from db.base import Base
 from db.models.users import User
 from services.user_service import UserService
-from werkzeug.security import generate_password_hash
+
 
 @pytest.fixture(scope="module")
 def session():
@@ -29,8 +30,18 @@ def seed_db(session):
     """Fixture to seed the database with test data."""
     session.query(User).delete()
     hashed_password = generate_password_hash("password", method="pbkdf2:sha256")
-    user1 = User(username="testuser1", password_hash=hashed_password, role="user", email="test1@test.com")
-    user2 = User(username="testuser2", password_hash=hashed_password, role="admin", email="test2@test.com")
+    user1 = User(
+        username="testuser1",
+        password_hash=hashed_password,
+        role="user",
+        email="test1@test.com",
+    )
+    user2 = User(
+        username="testuser2",
+        password_hash=hashed_password,
+        role="admin",
+        email="test2@test.com",
+    )
     session.add(user1)
     session.add(user2)
     session.commit()

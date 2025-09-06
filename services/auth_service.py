@@ -33,16 +33,19 @@ class AuthService:
         """Check if current_user has the required role."""
         if not self.is_authenticated():
             return False
-        user_role = str(self.current_user.role) # type: ignore
+        user_role = str(self.current_user.role)  # type: ignore
         return self.roles.get(user_role, 0) >= self.roles.get(required_role, 0)
 
+
 auth_service: AuthService | None = None
+
 
 def init_auth_service(session: Session):
     global auth_service
     if auth_service is None:
         auth_service = AuthService(session)
     return auth_service
+
 
 def get_auth_service():
     global auth_service

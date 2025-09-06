@@ -61,7 +61,7 @@ jobs:
       - name: Build with PyInstaller
         run: uv run pyinstaller PySideAlchemy.spec
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pysidealchemy-build
           path: dist/

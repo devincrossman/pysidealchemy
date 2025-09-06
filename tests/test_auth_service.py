@@ -1,11 +1,12 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from werkzeug.security import generate_password_hash
 
 from db.base import Base
 from db.models.users import User
 from services.auth_service import AuthService
-from werkzeug.security import generate_password_hash
+
 
 @pytest.fixture(scope="module")
 def session():
