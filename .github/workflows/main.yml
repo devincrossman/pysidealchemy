@@ -58,6 +58,8 @@ jobs:
         run: pip install uv
       - name: Install dependencies
         run: uv sync --quiet
+      - name: Create .env file for build
+        run: Copy-Item .env.example .env
       - name: Build with PyInstaller
         run: uv run pyinstaller PySideAlchemy.spec
       - name: Upload build artifact
