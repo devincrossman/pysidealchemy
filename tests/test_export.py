@@ -1,9 +1,11 @@
+import csv
 import os
 import unittest
-import csv
-from PySide6.QtCore import QAbstractTableModel, Qt
-from utils.export import export_to_csv, export_to_xlsx
+
 import pandas as pd
+from PySide6.QtCore import QAbstractTableModel, Qt
+
+from utils.export import export_to_csv, export_to_xlsx
 
 
 class MockTableModel(QAbstractTableModel):
@@ -50,7 +52,7 @@ class TestExport(unittest.TestCase):
     def test_export_to_csv(self):
         export_to_csv(self.model, self.csv_file)
         self.assertTrue(os.path.exists(self.csv_file))
-        with open(self.csv_file, "r") as f:
+        with open(self.csv_file) as f:
             reader = csv.reader(f)
             self.assertEqual(next(reader), self.headers)
             for i, row in enumerate(reader):

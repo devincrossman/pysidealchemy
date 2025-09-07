@@ -17,6 +17,7 @@ learning PySide and SQLAlchemy
   - Any logged-in user can view **Orders**.
   - Only **admins** can view **Users**.
 - Menu bar with *About*, *Logout*, and *Quit*.
+- **Export Data**: Export the current view to CSV or Excel (.xlsx) format from the "Export" menu.
 - Secure tab switching (restricted tabs only open after successful login).
 
 ---
@@ -139,6 +140,15 @@ uv run ruff check . --fix
 The application can be built into an exe using PyInstaller.
 
 Run `pyinstaller pysidealchemy.spec` to generate the exe in the dist folder
+
+### Testing
+This project uses `pytest` for testing. To run the test suite:
+
+```
+uv run pytest
+```
+
+This command will automatically discover and run all tests in the `tests/` directory.
 
 ## 🌱 Development Notes
 - To reset the app, delete database.db and rerun — it will recreate tables.

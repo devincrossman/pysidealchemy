@@ -1,6 +1,7 @@
 import csv
-from PySide6.QtCore import QAbstractTableModel, Qt
+
 import pandas as pd
+from PySide6.QtCore import QAbstractTableModel, Qt
 
 
 def export_to_csv(model: QAbstractTableModel, file_path: str):

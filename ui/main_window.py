@@ -3,8 +3,8 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMainWindow,
     QMessageBox,
-    QTabWidget,
     QTableView,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
