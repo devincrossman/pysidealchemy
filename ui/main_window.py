@@ -50,13 +50,13 @@ class MainWindow(QMainWindow):
 
         # Export menu
         export_menu = menubar.addMenu("Export")
-        export_csv_action = QAction("Export to CSV", self)
-        export_csv_action.triggered.connect(lambda: self.export_data("csv"))
-        export_menu.addAction(export_csv_action)
+        self.export_csv_action = QAction("Export to CSV", self)
+        self.export_csv_action.triggered.connect(lambda: self.export_data("csv"))
+        export_menu.addAction(self.export_csv_action)
 
-        export_xlsx_action = QAction("Export to XLSX", self)
-        export_xlsx_action.triggered.connect(lambda: self.export_data("xlsx"))
-        export_menu.addAction(export_xlsx_action)
+        self.export_xlsx_action = QAction("Export to XLSX", self)
+        self.export_xlsx_action.triggered.connect(lambda: self.export_data("xlsx"))
+        export_menu.addAction(self.export_xlsx_action)
 
         # About action
         about_action = QAction("About", self)
@@ -74,6 +74,14 @@ class MainWindow(QMainWindow):
         quit_action.setShortcut("Ctrl+Q")
         quit_action.triggered.connect(self.close)
         file_menu.addAction(quit_action)
+
+        self.tabs.currentChanged.connect(self.update_export_menu)
+        self.update_export_menu(self.tabs.currentIndex())
+
+    def update_export_menu(self, index):
+        tab_name = self.tabs.tabText(index)
+        self.export_csv_action.setText(f"Export {tab_name} to CSV")
+        self.export_xlsx_action.setText(f"Export {tab_name} to XLSX")
 
     def export_data(self, file_format):
         current_widget = self.tabs.currentWidget()
