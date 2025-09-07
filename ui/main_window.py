@@ -1,7 +1,9 @@
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
+    QFileDialog,
     QMainWindow,
     QMessageBox,
+    QTableView,
     QTabWidget,
     QVBoxLayout,
     QWidget,
@@ -15,6 +17,7 @@ from ui.orders_view import OrdersView
 from ui.products_view import ProductsView
 from ui.secure_tab_bar import SecureTabBar
 from ui.users_view import UsersView
+from utils.export import export_to_csv, export_to_xlsx
 
 
 class MainWindow(QMainWindow):
@@ -45,6 +48,16 @@ class MainWindow(QMainWindow):
         menubar = self.menuBar()
         file_menu = menubar.addMenu("File")
 
+        # Export menu
+        export_menu = menubar.addMenu("Export")
+        self.export_csv_action = QAction("Export to CSV", self)
+        self.export_csv_action.triggered.connect(lambda: self.export_data("csv"))
+        export_menu.addAction(self.export_csv_action)
+
+        self.export_xlsx_action = QAction("Export to XLSX", self)
+        self.export_xlsx_action.triggered.connect(lambda: self.export_data("xlsx"))
+        export_menu.addAction(self.export_xlsx_action)
+
         # About action
         about_action = QAction("About", self)
         about_action.triggered.connect(self.show_about)
@@ -61,6 +74,52 @@ class MainWindow(QMainWindow):
         quit_action.setShortcut("Ctrl+Q")
         quit_action.triggered.connect(self.close)
         file_menu.addAction(quit_action)
+
+        self.tabs.currentChanged.connect(self.update_export_menu)
+        self.update_export_menu(self.tabs.currentIndex())
+
+    def update_export_menu(self, index):
+        tab_name = self.tabs.tabText(index)
+        self.export_csv_action.setText(f"Export {tab_name} to CSV")
+        self.export_xlsx_action.setText(f"Export {tab_name} to XLSX")
+
+    def export_data(self, file_format):
+        current_widget = self.tabs.currentWidget()
+        if not current_widget:
+            return
+
+        table_view = current_widget.findChild(QTableView)
+        if not table_view:
+            QMessageBox.warning(
+                self, "Export Error", "No table view found in the current tab."
+            )
+            return
+
+        model = table_view.model()
+        if not model:
+            QMessageBox.warning(
+                self, "Export Error", "No model found for the current table view."
+            )
+            return
+
+        if file_format == "csv":
+            file_path, _ = QFileDialog.getSaveFileName(
+                self, "Save CSV", "", "CSV Files (*.csv)"
+            )
+            if file_path:
+                export_to_csv(model, file_path)
+                QMessageBox.information(
+                    self, "Export Success", f"Data exported to {file_path}"
+                )
+        elif file_format == "xlsx":
+            file_path, _ = QFileDialog.getSaveFileName(
+                self, "Save XLSX", "", "XLSX Files (*.xlsx)"
+            )
+            if file_path:
+                export_to_xlsx(model, file_path)
+                QMessageBox.information(
+                    self, "Export Success", f"Data exported to {file_path}"
+                )
 
     def show_about(self):
         QMessageBox.information(
