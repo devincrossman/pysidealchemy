@@ -1,7 +1,7 @@
 # PySide Alchemy
 
 PySide Alchemy is an experimental desktop application built with **Python 3.13**, **PySide6** (Qt for Python), and **SQLAlchemy**.  
-It provides a simple GUI for managing **Products**, **Orders**, and **Users**, with login and role-based access control. It was developped while
+It provides a simple GUI for managing **Products**, **Orders**, and **Users**, with login and role-based access control. It was developed while
 learning PySide and SQLAlchemy
 
 ---

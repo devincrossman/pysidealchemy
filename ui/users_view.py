@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
+    QHeaderView,
     QMessageBox,
     QPushButton,
     QTableView,
@@ -26,6 +27,14 @@ class UsersView(QWidget):
 
         self.table = QTableView()
         self.table.setModel(self.model)
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # ID
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Username
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)  # Email
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Role
         self.table.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QTableView.SelectionMode.ExtendedSelection)
         layout.addWidget(self.table)

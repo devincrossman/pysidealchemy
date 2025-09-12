@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import (
     QHBoxLayout,
+    QHeaderView,
     QMessageBox,
     QPushButton,
     QTableView,
@@ -22,6 +23,14 @@ class ProductsView(QWidget):
 
         self.table = QTableView()
         self.table.setModel(self.model)
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # ID
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Name
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Price
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Stock
         self.table.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QTableView.SelectionMode.ExtendedSelection)
         layout.addWidget(self.table)
