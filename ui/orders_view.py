@@ -26,12 +26,16 @@ class OrdersView(QWidget):
 
         self.table = QTableView()
         self.table.setModel(self.model)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # ID
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # User
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)           # Products
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Status
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)  # Products
+        header.setSectionResizeMode(
+            3, QHeaderView.ResizeMode.ResizeToContents
+        )  # Status
         header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Total
         self.table.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QTableView.SelectionMode.ExtendedSelection)

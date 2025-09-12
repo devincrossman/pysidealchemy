@@ -29,10 +29,7 @@ class OrdersTableModel(QAbstractTableModel):
                 return order.user.username
             elif col == 2:
                 return ", ".join(
-                    [
-                        f"{op.product.name} (x{op.quantity})"
-                        for op in order.products
-                    ]
+                    [f"{op.product.name} (x{op.quantity})" for op in order.products]
                 )
             elif col == 3:
                 return order.status
@@ -53,7 +50,7 @@ class OrdersTableModel(QAbstractTableModel):
             return Qt.ItemFlag.ItemIsEnabled
         # Make all columns non-editable for now, except status
         if index.column() == 3:
-             return (
+            return (
                 Qt.ItemFlag.ItemIsSelectable
                 | Qt.ItemFlag.ItemIsEnabled
                 | Qt.ItemFlag.ItemIsEditable
@@ -90,7 +87,7 @@ class OrdersTableModel(QAbstractTableModel):
 
     def updateOrder(self, order, user_id, products):
         order.user_id = user_id
-        
+
         # Remove old products
         for op in order.products:
             self.session.delete(op)
@@ -127,7 +124,7 @@ class OrdersTableModel(QAbstractTableModel):
                 if op.product_id in deleted_product_ids:
                     orders_to_delete.append(order)
                     break
-        
+
         for order in orders_to_delete:
             self.session.delete(order)
 

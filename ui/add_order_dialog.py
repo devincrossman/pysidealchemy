@@ -92,7 +92,9 @@ class AddOrderDialog(QDialog):
 
     def accept(self):
         if self.products_table.rowCount() == 0:
-            QMessageBox.warning(self, "No Products", "An order must have at least one product.")
+            QMessageBox.warning(
+                self, "No Products", "An order must have at least one product."
+            )
             return
         super().accept()
 

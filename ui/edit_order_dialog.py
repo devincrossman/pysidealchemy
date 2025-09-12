@@ -75,7 +75,9 @@ class EditOrderDialog(QDialog):
             self.products_table.setItem(row_position, 0, product_item)
 
             quantity_spin = QSpinBox()
-            quantity_spin.setRange(1, op.product.stock + op.quantity) # Allow for current quantity
+            quantity_spin.setRange(
+                1, op.product.stock + op.quantity
+            )  # Allow for current quantity
             quantity_spin.setValue(op.quantity)
             self.products_table.setCellWidget(row_position, 1, quantity_spin)
 
@@ -111,7 +113,9 @@ class EditOrderDialog(QDialog):
 
     def accept(self):
         if self.products_table.rowCount() == 0:
-            QMessageBox.warning(self, "No Products", "An order must have at least one product.")
+            QMessageBox.warning(
+                self, "No Products", "An order must have at least one product."
+            )
             return
         super().accept()
 

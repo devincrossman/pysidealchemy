@@ -11,7 +11,9 @@ class Order(Base):
     status = Column(String, nullable=False, default="Pending")
 
     # Relationships
-    products = relationship("OrderProduct", back_populates="order", cascade="all, delete-orphan")
+    products = relationship(
+        "OrderProduct", back_populates="order", cascade="all, delete-orphan"
+    )
     user = relationship("User")
 
     @property
