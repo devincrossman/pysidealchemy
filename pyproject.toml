@@ -1,7 +1,7 @@
 [project]
-name = "simple-test-example"
-version = "0.1.0"
-description = "Add your description here"
+name = "PySideAlchemy"
+version = "0.2.0"
+description = "An experimental application developed while learning PySide and SQLAlchemy"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -50,7 +50,6 @@ ignore = [
 fixable = ["ALL"]
 per-file-ignores = { "tests/*" = ["D", "S101"] }
 
-# Optional: formatter config (if you use `ruff format`)
 [tool.ruff.format]
 quote-style = "double"   # or "single"
 indent-style = "space"   # or "tab"

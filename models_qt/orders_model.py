@@ -1,5 +1,6 @@
 from PySide6.QtCore import QAbstractTableModel, Qt
 
+from db.models.order_products import OrderProduct
 from db.models.orders import Order
 
 
@@ -8,7 +9,7 @@ class OrdersTableModel(QAbstractTableModel):
         super().__init__()
         self.session = session
         self.orders = self.session.query(Order).all()
-        self.headers = ["ID", "Product ID", "User ID", "Quantity", "Status"]
+        self.headers = ["ID", "User", "Products", "Status", "Total"]
 
     def rowCount(self, parent=None):
         return len(self.orders)
@@ -21,17 +22,22 @@ class OrdersTableModel(QAbstractTableModel):
             return None
         order = self.orders[index.row()]
         col = index.column()
-        if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole):
+        if role == Qt.ItemDataRole.DisplayRole:
             if col == 0:
                 return order.id
             elif col == 1:
-                return order.product_id
+                return order.user.username
             elif col == 2:
-                return order.user_id
+                return ", ".join(
+                    [
+                        f"{op.product.name} (x{op.quantity})"
+                        for op in order.products
+                    ]
+                )
             elif col == 3:
-                return order.quantity
-            elif col == 4:
                 return order.status
+            elif col == 4:  # Total
+                return f"{order.total:.2f}"
         return None
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
@@ -45,36 +51,59 @@ class OrdersTableModel(QAbstractTableModel):
     def flags(self, index):
         if not index.isValid():
             return Qt.ItemFlag.ItemIsEnabled
-        if index.column() == 0:
-            return Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
-        return (
-            Qt.ItemFlag.ItemIsSelectable
-            | Qt.ItemFlag.ItemIsEnabled
-            | Qt.ItemFlag.ItemIsEditable
-        )
+        # Make all columns non-editable for now, except status
+        if index.column() == 3:
+             return (
+                Qt.ItemFlag.ItemIsSelectable
+                | Qt.ItemFlag.ItemIsEnabled
+                | Qt.ItemFlag.ItemIsEditable
+            )
+        return Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
 
     def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         if not index.isValid() or role != Qt.ItemDataRole.EditRole:
             return False
         order = self.orders[index.row()]
         col = index.column()
-        if col == 1:
-            order.product_id = int(value)
-        elif col == 2:
-            order.user_id = int(value)
-        elif col == 3:
-            order.quantity = int(value)
-        elif col == 4:
+        if col == 3:
             order.status = str(value)
+        else:
+            return False
         self.session.commit()
         self.dataChanged.emit(index, index)
         return True
 
-    def addOrder(self, product_id=0, user_id=0, quantity=1, status="Pending"):
-        new_order = Order(
-            product_id=product_id, user_id=user_id, quantity=quantity, status=status
-        )
+    def addOrder(self, user_id, products, status="Pending"):
+        new_order = Order(user_id=user_id, status=status)
+        for p_info in products:
+            order_product = OrderProduct(
+                order=new_order,
+                product_id=p_info["product_id"],
+                quantity=p_info["quantity"],
+            )
+            self.session.add(order_product)
         self.session.add(new_order)
+        self.session.commit()
+        self.layoutAboutToBeChanged.emit()
+        self.orders = self.session.query(Order).all()
+        self.layoutChanged.emit()
+
+    def updateOrder(self, order, user_id, products):
+        order.user_id = user_id
+        
+        # Remove old products
+        for op in order.products:
+            self.session.delete(op)
+
+        # Add new products
+        for p_info in products:
+            order_product = OrderProduct(
+                order=order,
+                product_id=p_info["product_id"],
+                quantity=p_info["quantity"],
+            )
+            self.session.add(order_product)
+
         self.session.commit()
         self.layoutAboutToBeChanged.emit()
         self.orders = self.session.query(Order).all()
@@ -91,9 +120,17 @@ class OrdersTableModel(QAbstractTableModel):
 
     def removeOrdersWithProducts(self, deleted_product_ids):
         """Remove orders referencing deleted products (for cross-tab refresh)"""
-        to_delete = [o for o in self.orders if o.product_id in deleted_product_ids]
-        for order in to_delete:
+        # This needs to be updated to check the new relationship
+        orders_to_delete = []
+        for order in self.orders:
+            for op in order.products:
+                if op.product_id in deleted_product_ids:
+                    orders_to_delete.append(order)
+                    break
+        
+        for order in orders_to_delete:
             self.session.delete(order)
+
         self.session.commit()
         self.layoutAboutToBeChanged.emit()
         self.orders = self.session.query(Order).all()

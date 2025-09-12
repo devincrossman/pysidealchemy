@@ -7,11 +7,13 @@ from db.base import Base
 class Order(Base):
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    quantity = Column(Integer, nullable=False, default=1)
     status = Column(String, nullable=False, default="Pending")
 
-    # Optional relationships for easy access
-    product = relationship("Product")
+    # Relationships
+    products = relationship("OrderProduct", back_populates="order", cascade="all, delete-orphan")
     user = relationship("User")
+
+    @property
+    def total(self):
+        return sum(op.product.price * op.quantity for op in self.products)
