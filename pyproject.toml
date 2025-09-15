@@ -15,11 +15,12 @@ dependencies = [
     "pytest>=8.3.2",
     "pandas>=2.3.2",
     "openpyxl>=3.1.5",
+    "qt-themes>=0.3.0",
 ]
 
 [tool.ruff]
 # Target Python version
-target-version = "py311"
+target-version = "py313"
 
 # Maximum line length (affects lint + formatter)
 line-length = 88

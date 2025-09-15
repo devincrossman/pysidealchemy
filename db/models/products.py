@@ -10,5 +10,6 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False, default=0.0)
     stock = Column(Integer, nullable=False, default=0)
+    image_path = Column(String, nullable=True)
 
     orders = relationship("OrderProduct", back_populates="product")

@@ -55,9 +55,24 @@ def add_sample_data(session: Session):
     session.add(bob)
 
     # Create some products
-    product1 = Product(name="Laptop", price=1200.0, stock=10)
-    product2 = Product(name="Mouse", price=25.0, stock=100)
-    product3 = Product(name="Keyboard", price=45.0, stock=50)
+    product1 = Product(
+        name="Laptop",
+        price=1200.0,
+        stock=10,
+        image_path="assets/images/laptop.png",
+    )
+    product2 = Product(
+        name="Mouse",
+        price=25.0,
+        stock=100,
+        image_path="assets/images/mouse.png",
+    )
+    product3 = Product(
+        name="Keyboard",
+        price=45.0,
+        stock=50,
+        image_path="assets/images/keyboard.png",
+    )
     session.add_all([product1, product2, product3])
 
     session.flush()  # flush so we get IDs assigned
