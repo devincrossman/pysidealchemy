@@ -1,3 +1,4 @@
+import qt_themes
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QFileDialog,
@@ -58,6 +59,20 @@ class MainWindow(QMainWindow):
         self.export_xlsx_action.triggered.connect(lambda: self.export_data("xlsx"))
         export_menu.addAction(self.export_xlsx_action)
 
+        # --- Theme Menu ---
+        theme_menu = menubar.addMenu("Themes")
+
+        for theme in qt_themes.get_themes():
+            action = QAction(theme, self)
+            action.setCheckable(True)
+            # store theme name as data
+            action.setData(theme)
+            action.triggered.connect(self.change_theme)
+            theme_menu.addAction(action)
+
+        # keep track of actions so we can uncheck others when one is selected
+        self.theme_actions = theme_menu.actions()
+
         # About action
         about_action = QAction("About", self)
         about_action.triggered.connect(self.show_about)
@@ -77,6 +92,24 @@ class MainWindow(QMainWindow):
 
         self.tabs.currentChanged.connect(self.update_export_menu)
         self.update_export_menu(self.tabs.currentIndex())
+
+        default_theme = "dracula"
+        qt_themes.set_theme(default_theme)
+        for act in self.theme_actions:
+            if act.data() == default_theme:
+                act.setChecked(True)
+                break
+
+    def change_theme(self):
+        action = self.sender()
+        if not action:
+            return
+        theme = action.data()
+        qt_themes.set_theme(theme)
+
+        # update check state (only one checked at a time)
+        for act in self.theme_actions:
+            act.setChecked(act is action)
 
     def update_export_menu(self, index):
         tab_name = self.tabs.tabText(index)

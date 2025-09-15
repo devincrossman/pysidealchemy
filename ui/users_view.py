@@ -27,6 +27,7 @@ class UsersView(QWidget):
 
         self.table = QTableView()
         self.table.setModel(self.model)
+        self.table.setAlternatingRowColors(True)
         self.table.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )

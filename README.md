@@ -129,12 +129,16 @@ Run lint checks:
 
 ```
 uv run ruff check .
+uv run ruff format --check
 ```
 Auto-fix simple issues:
 
 ```
 uv run ruff check . --fix
+uv run ruff format
 ```
+
+
 
 ### PyInstaller
 The application can be built into an exe using PyInstaller.

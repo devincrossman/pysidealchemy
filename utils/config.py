@@ -4,13 +4,13 @@ import sys
 from dotenv import load_dotenv
 
 
-def resource_path(path: str) -> str:
+def resource_path(path: str = "") -> str:
     """Get the absolute path to a resource, compatible with PyInstaller."""
     base_path = getattr(sys, "_MEIPASS", os.path.abspath("."))
     return os.path.join(base_path, path)
 
 
-def app_path(path: str) -> str:
+def app_path(path: str = "") -> str:
     """Return a path relative to the app's running folder (exe or source)."""
     if getattr(sys, "frozen", False):
         base = os.path.dirname(sys.executable)

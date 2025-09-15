@@ -117,7 +117,6 @@ class OrdersTableModel(QAbstractTableModel):
 
     def removeOrdersWithProducts(self, deleted_product_ids):
         """Remove orders referencing deleted products (for cross-tab refresh)"""
-        # This needs to be updated to check the new relationship
         orders_to_delete = []
         for order in self.orders:
             for op in order.products:

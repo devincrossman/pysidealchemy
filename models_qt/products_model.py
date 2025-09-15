@@ -8,13 +8,13 @@ class ProductTableModel(QAbstractTableModel):
         super().__init__()
         self.session = session
         self.products = self.session.query(Product).all()
-        self.headers = ["ID", "Name", "Price", "Stock"]
+        self.headers = ["ID", "Name", "Price", "Stock", "Image"]
 
     def rowCount(self, parent=None):
         return len(self.products)
 
     def columnCount(self, parent=None):
-        return 4
+        return len(self.headers)
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid():
@@ -30,6 +30,8 @@ class ProductTableModel(QAbstractTableModel):
                 return product.price
             elif col == 3:
                 return product.stock
+            elif col == 4:
+                return product.image_path
         return None
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
@@ -68,12 +70,16 @@ class ProductTableModel(QAbstractTableModel):
                 product.stock = int(value)
             except ValueError:
                 return False
+        elif col == 4:
+            product.image_path = str(value)
         self.session.commit()
         self.dataChanged.emit(index, index)
         return True
 
-    def addProduct(self, name="New Product", price=0.0, stock=0):
-        new_product = Product(name=name, price=price, stock=stock)
+    def addProduct(self, name="New Product", price=0.0, stock=0, image_path=""):
+        new_product = Product(
+            name=name, price=price, stock=stock, image_path=image_path
+        )
         self.session.add(new_product)
         self.session.commit()
         self.layoutAboutToBeChanged.emit()

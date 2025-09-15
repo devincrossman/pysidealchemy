@@ -1,11 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+import qt_themes
+from PyInstaller.utils.hooks import collect_data_files
 
+# collect all theme files from qt_themes package
+datas = collect_data_files("qt_themes", subdir="themes")
+datas.append(('.env', '.'))
+datas.append(('assets/images/*.*', 'assets/images'))
 a = Analysis(
     ['main.py'],
     pathex=[os.path.abspath(".")],
     binaries=[],
-    datas=[('.env', '.')],
+    datas=datas,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
